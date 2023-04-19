@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -6,6 +7,7 @@
         <title>Registracija</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/register.css" rel="stylesheet">
+        <link href="css/navbar-fixed-top.css" rel="stylesheet">
     </head>
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -22,17 +24,17 @@
                     <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="index.php">Domov</a></li>
-                        <li><a href="login.php">Login</a></li>
-                        <li><a href="register.php">Register</a></li>
+                        <li><a href="login.php">Prijava</a></li>
+                        <li><a href="register.php">Registracija</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
-        <h2 class="form-register-heading" align="center">Registracija</h2>
         <form action="register.php" method="POST" class="form-register" novalidate>
+            <h2 class="form-register-heading">Registracija</h2>
             Uporabniško ime: <input type="text" name="username" required="required" class="form-control"><br/>
             Geslo: <input type="password" name="password" required="required" class="form-control"><br>
-            <input type="submit" value="Register" class="btn btn-lg btn-primary btn-block">
+            <input type="submit" value="Registracija" class="btn btn-lg btn-primary btn-block">
         </form>
         <div style="text-align:center">
         <a href="login.php">Prijavi se</a><br><br>

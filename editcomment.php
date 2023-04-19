@@ -43,9 +43,6 @@ $id_exists = false;
     <?php
         if(!empty($_GET['id'])){
             print '<h2>Urejanje komentarja</h2>';
-            print '<p>Hello '.$user.'</p>';
-            print '<a href = "logout.php">Odjava</a><br>';
-            print '<a href = "home.php">Domov</a><br>';
             $pravi_uporabnik=false;
             $idkomentarja = $_GET['id'];
             $id_exists = true;
@@ -54,11 +51,10 @@ $id_exists = false;
             $res=mysqli_query($mojsql, "select id_recepta, username as uporabnik, komentar, dodano, urejeno from komentar join users on ID=ID_uporabnika where id_komentarja=".$idkomentarja);
             $row=mysqli_fetch_array($res);
             $idrecept=$row['id_recepta'];
-            print '<a href="view.php?id='.$idrecept.'"a>Nazaj</a>';
             $userid=mysqli_fetch_array(mysqli_query($mojsql,"select ID from users where username='$user'"))['ID'];
             $pravi_uporabnik=mysqli_fetch_array(mysqli_query($mojsql,"select ID_uporabnika from komentar where ID_komentarja=".$idkomentarja))['ID_uporabnika']==$userid;
             print '<h2 align="center">Izbran komentar</h2>';
-            print '<table border="1px" width="100%">';
+            print '<table border="1px" width="100%" class="table table-bordered">';
             print '<tr>';
             print '<th>Uporabnik</th>';
             print '<th>Komentar</th>';
@@ -80,17 +76,19 @@ $id_exists = false;
             print '<h2 align="center">Napačen uporabnik.</h2>';
         }
         else if($id_exists){
-            print '<form action="editcomment.php" method="POST">
-            Vnesi nov komentar: <input type="text" name="komentar"/><br>
+            print '<div style="border:2px inset black;"><form action="editcomment.php" method="POST" id="editcomment">
+            <label>Vnesi nov komentar:</label><br>
+            <textarea name="komentar" form="editcomment" cols="50" rows="5" placeholder="Sestavine" oninput=\'this.style.height = "";this.style.height = this.scrollHeight + "px"\' style="resize:none"></textarea><br>
             <input type="submit" value="Posodobi komentar"/>
-            <input type="hidden" name="id" value="'.$idkomentarja.'"/>
+            <input type="hidden" name="id" value="'.$id.'"/>
             <input type="hidden" name="recept" value="'.$idrecept.'"/>
-            </form>';
+            </form></div>';
         }
         else {
             print '<h2 align="center">Ni komentarja.</h2>';
         }
-    ?>
+        print '<a href="view.php?id='.$idrecept.'" class="btn btn-default active">Nazaj</a>';
+        ?>
 </body>
 </html>
 
@@ -102,7 +100,6 @@ $id_exists = false;
         $recept=$_POST['recept'];
         $id = $_POST['id'];
         $date = strftime("%F %X");
-
         $query=mysqli_query($mojsql, "UPDATE komentar SET komentar='$komentar', urejeno='$date' WHERE id_komentarja='$id'");
         header("location:view.php?id=".$recept);
     }

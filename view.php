@@ -49,7 +49,7 @@
         $mojsql = mysqli_connect("localhost", "user", "user", "webdata") or die(mysqli_error($mojsql));
         $test = mysqli_select_db($mojsql, "webdata") or die("Cannot connect to databese..");
         $recept = mysqli_fetch_array(mysqli_query($mojsql, "select id_recepta, id_uporabnika, username as uporabnik, naslov, sestavine, recept, dodano, urejeno, public from recepti join users on ID=ID_uporabnika where id_recepta='$idrecepta'"));
-        print '<div style="border:1px inset black">';
+        print '<div style="border:2px inset black;padding-left:10px;">';
         print '<h2>'.$recept['naslov'].'</h2>';
         print '<h3>Sestavine:</h3>';
         print '<p >'.$recept['sestavine'].'</p>';
@@ -61,14 +61,19 @@
         print '</div>';
         print '</div>';
     ?>
-    <form action="addcomment.php" method="POST">
+    <br>
+    <div style="padding-left:10px;">
+    <a href="home.php" class="btn btn-default active">Nazaj</a>
+    <form action="addcomment.php" method="POST" id="addcomment">
         <h2>Objavi komentar:</h2>
-        Komentar: <input type="text" name="komentar"><br>
+        <label>Komentar:</label><br>
+        <textarea name="komentar" form="addcomment" cols="50" rows="5" placeholder="Komentar" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' style="resize:none"></textarea><br>
         <input type="hidden" name="recept" value="<?php echo $idrecepta;?>">
         <input type="submit" value="Dodaj komentar">
     </form>
-    <a href="home.php">Nazaj</a>
-    <table border="1px" width="100%">
+    </div>
+    <br>
+    <table border="1px" width="100%" class="table table-striped">
         <tr>
             <th>Uporabnik</th>
             <th>Komentar</th>

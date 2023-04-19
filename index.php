@@ -34,7 +34,35 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    <a href="register.php">Registracija</a><br>
-    <a href="login.php">Prijava</a>
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Janezovi recepti</h1>
+        <p>To je spletna stran, na kateri lahko objavite svoje recepte ali pa poiščete recept od koga drugega. Na vse recepte lahko tudi komentirate, svoje recepte in komentarje lahko tudi urejate.</p>
+        <a class="btn btn-primary btn-lg" href="login.php" role="button">Prijava &raquo;</a>&nbsp;&NonBreakingSpace;
+        <a class="btn btn-primary btn-lg" href="register.php" role="button">Registracija &raquo;</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2>Recepti</h2>
+          <p>Recepte lahko objavi vsak uporabnik. Za ogled in objavo receptov se morate prijaviti. Če es še niste registrirali, se lahko registrirate ZDAJ!</p>
+          <p><a class="btn btn-default" href="#" role="button">REGISTRIRAJTE SE ZDAJ! &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Komentarji</h2>
+          <p>Na recepte lahko komentira vsak uporabnik. Za komentiranje se morate prijaviti. Če es še niste registrirali, se lahko registrirate ZDAJ!</p>
+          <p><a class="btn btn-default" href="#" role="button">REGISTRIRAJTE SE ZDAJ! &raquo;</a></p>
+       </div>
+        <div class="col-md-4">
+          <h2>Iskanje receptov</h2>
+          <p>Iskanje receptov ne bi moglo iti lažje! Recepte lahko iščete po sestavinah, ki so uporabljene v receptu.</p>
+          <p><a class="btn btn-default" href="#" role="button">REGISTRIRAJTE SE ZDAJ! &raquo;</a></p>
+        </div>
+      </div>
+
 </body>
 </html>

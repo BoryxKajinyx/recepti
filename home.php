@@ -49,7 +49,7 @@
     <?php
         if(empty($_GET['id'])){
             print '<h2 align="center">Recepti</h2>';
-            print '<a href="#addRecept" class="btn btn-default btn-lg active">Dodaj recept</a>';
+            print '<a href="add.php" class="btn btn-default btn-lg active">Dodaj recept</a>';
         }
         else{
             print'<div style="text-align:center">';
@@ -59,75 +59,53 @@
             print'</div>';
         }
     ?>
-    <table width="100%" class="table table-hover">
+    <table width="100%" class="table table-striped">
         <thead class="">
             <tr>
-                <th>Naslov</th>
-                <th>Uporabnik</th>
-                <th>Sestavine</th>
-                <th>Dodano</th>
-                <th>Urejeno</th>
-                <th>Uredi</th>
-                <th>Izbriši</th>
-                <th>Javno</th>
+                <th scope="col">Naslov</th>
+                <th scope="col">Uporabnik</th>
+                <th scope="col">Sestavine</th>
+                <th scope="col">Dodano</th>
+                <th scope="col">Urejeno</th>
+                <th scope="col">Uredi</th>
+                <th scope="col">Izbriši</th>
+                <th scope="col">Javno</th>
             </tr>
         </thead>
-    <?php 
-        $mojsql =mysqli_connect("localhost", "user", "user", "webdata") or die(mysqli_error($mojsql));
-        $test = mysqli_select_db($mojsql, "webdata") or die("Cannot connect to databese..");
-        //$res;
-        if(empty($_GET['id'])){
-            $res=mysqli_query($mojsql, "select id_recepta, username as uporabnik, naslov, sestavine, dodano, urejeno, public from recepti join users on ID=ID_uporabnika where public='yes' or username='$user'");
-        }else{
-            $sestavine=$_GET['id'];
-            $sestavine = htmlspecialchars($sestavine);
-            $sarray= explode(",",$sestavine);
-            $query="select username as id_recepta, username as uporabnik, naslov, sestavine, dodano, urejeno, public from recepti join users on ID=ID_uporabnika where (public='yes' or username='$user') and ((sestavine like '%".$sarray[0]."%')";
-            for ($i=1;$i<count($sarray); $i++) { 
-                $query.=" or (sestavine like '%".$sarray[$i]."%')";
-            }
-            $query.=")";
-            //print($query);
-            $res=mysqli_query($mojsql,$query);
-        }
-        while($row = mysqli_fetch_array($res)){
-            print "<tr>";
-            print '<td align "center"><a href="view.php?id='.$row['id_recepta'].'">'.$row['naslov']."</a></td>";
-            print '<td align "center">'.$row['uporabnik'] . "</td>"; 
-            print '<td align "center">'.$row['sestavine'] . "</td>"; 
-            print '<td align "center">'.$row['dodano'] . "</td>";
-            print '<td align "center">'.$row['urejeno'] . "</td>";  
-            print '<td align "center"><a href="#" onclick="editfunction('.$row['id_recepta'].','.'\''.$row['uporabnik'].'\''.','.'\''.$user.'\''.')">Uredi</a></td>';
-            print '<td align "center"><a href="#" onclick="deletefunction('.$row['id_recepta'].','.'\''.$row['uporabnik'].'\''.','.'\''.$user.'\''.')">Izbriši</a></td>'; 
-            print '<td align "center">'.$row['public'] . "</td>";
-            print "</tr>";
-        } 
-    ?>
+        <tbody>
+            <?php 
+                $mojsql =mysqli_connect("localhost", "user", "user", "webdata") or die(mysqli_error($mojsql));
+                $test = mysqli_select_db($mojsql, "webdata") or die("Cannot connect to databese..");
+                //$res;
+                if(empty($_GET['id'])){
+                    $res=mysqli_query($mojsql, "select id_recepta, username as uporabnik, naslov, sestavine, dodano, urejeno, public from recepti join users on ID=ID_uporabnika where public='yes' or username='$user'");
+                }else{
+                    $sestavine=$_GET['id'];
+                    $sestavine = htmlspecialchars($sestavine);
+                    $sarray= explode(",",$sestavine);
+                    $query="select username as id_recepta, username as uporabnik, naslov, sestavine, dodano, urejeno, public from recepti join users on ID=ID_uporabnika where (public='yes' or username='$user') and ((sestavine like '%".$sarray[0]."%')";
+                    for ($i=1;$i<count($sarray); $i++) { 
+                        $query.=" or (sestavine like '%".$sarray[$i]."%')";
+                    }
+                    $query.=")";
+                    //print($query);
+                    $res=mysqli_query($mojsql,$query);
+                }
+                while($row = mysqli_fetch_array($res)){
+                    print "<tr>";
+                    print '<td align "center"><a href="view.php?id='.$row['id_recepta'].'">'.$row['naslov']."</a></td>";
+                    print '<td align "center">'.$row['uporabnik'] . "</td>"; 
+                    print '<td align "center">'.$row['sestavine'] . "</td>"; 
+                    print '<td align "center">'.$row['dodano'] . "</td>";
+                    print '<td align "center">'.$row['urejeno'] . "</td>";  
+                    print '<td align "center"><a href="#" onclick="editfunction('.$row['id_recepta'].','.'\''.$row['uporabnik'].'\''.','.'\''.$user.'\''.')">Uredi</a></td>';
+                    print '<td align "center"><a href="#" onclick="deletefunction('.$row['id_recepta'].','.'\''.$row['uporabnik'].'\''.','.'\''.$user.'\''.')">Izbriši</a></td>'; 
+                    print '<td align "center">'.$row['public'] . "</td>";
+                    print "</tr>";
+                } 
+            ?>
+        </tbody>
     </table>
-    <a id="addRecept" style="display:block;position:relative;top:-50px;visibility:hidden"></a>
-    <div>
-        <form action="add.php" method="POST" id="add" role="form" class="form-horizontal">
-            <h2 id="addRecept">Objavi recept:</h2>
-            <div>
-                <label for="addNaslov">Naslov:</label>
-                <input type="text" name="naslov" placeholder="Naslov" id="addNaslov"><br>
-            </div>
-            <div>
-                <label>Sestavine:</label><br>
-                <textarea name="sestavine" form="add" cols="50" rows="5" placeholder="Sestavine" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' style="resize:none"></textarea><br>
-            </div>
-            <div>
-                <label>Recept:</label><br>
-                <textarea name="recept" form="add" cols="50" rows="5" placeholder="Recept" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' style="resize:none"></textarea><br>
-            </div>
-            <div>
-                <label>
-                    Javna objava?<input type="checkbox" name="public" value="yes" ><br>
-                </label>
-            </div>
-            <input type="submit" value="Dodaj recept">
-        </form>
-    </div>
     
     <script>
         function deletefunction(id,uporabnik,user){

@@ -34,19 +34,15 @@ $id_exists = false;
                 <li><a href="home.php">Domov</a></li>
                 <li><a href="login.php">Login</a></li>
                 <li><a href="register.php">Register</a></li>
-            </ul class="nav navbar-nav navbar-right">
-            <ul>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
                 <li><a href="logout.php">Odjava</a></li>
             </ul>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-    <h2>Edit Page</h2>
-    <p>Hello <?php print "$user"?>!</p>
-    <a href = "logout.php">Odjava</a><br>
-    <a href = "home.php">Domov</a>
     <h2 align="center">Izbran recept:</h2>
-    <table border="1px" width="100%">
+    <table width="100%" class="table table-bordered">
         <tr>
             <th>ID</th>
             <th>Naslov</th>
@@ -64,10 +60,10 @@ $id_exists = false;
                 $id_exists = true;
                 $mojsql = mysqli_connect("localhost", "user", "user", "webdata") or die(mysqli_error($mojsql));
                 $test = mysqli_select_db($mojsql, "webdata") or die("Cannot connect to databese..");
-                $query=mysqli_query($mojsql, "select username as uporabnik, naslov, sestavine, dodano, urejeno, public from recepti join users on ID=ID_uporabnika from list where ID_recepta=".$id);
+                $query=mysqli_query($mojsql, "select ID_recepta, username as uporabnik, naslov, recept, sestavine, dodano, urejeno, public from recepti join users on ID=ID_uporabnika where ID_recepta=".$id);
                 $count = mysqli_num_rows($query);
                 $userid=mysqli_fetch_array(mysqli_query($mojsql,"select ID from users where username='$user'"))['ID'];
-                $pravi_uporabnik=mysqli_fetch_array(mysqli_query($mojsql,"select ID_uporabnika from recept where ID_recepta=".$id))['ID_uporabnika']==$userid;
+                $pravi_uporabnik=mysqli_fetch_array(mysqli_query($mojsql,"select ID_uporabnika from recepti where ID_recepta=".$id))['ID_uporabnika']==$userid;
                 if($count > 0){
                     while($row = mysqli_fetch_array($query)){
                         print "<tr>";
@@ -95,17 +91,21 @@ $id_exists = false;
             print '<h2 align="center">Napačen uporabnik.</h2>';
         }
         else if($id_exists){
-            print '<form action="edit.php" method="POST">
-            Vnesi nov recept: <input type="text" name="details"/><br>
-            Javno? <input type="checkbox" name="public[]" value="yes"/><br>
+            print '<div style="border:2px inset black;"><form action="edit.php" method="POST" id="edit">
+            <label>Vnesi nove sestavine:</label><br>
+            <textarea name="sestavine" form="edit" cols="50" rows="5" placeholder="Sestavine" oninput=\'this.style.height = "";this.style.height = this.scrollHeight + "px"\' style="resize:none"></textarea><br>
+            <label>Vnesi nov recept:</label><br> 
+            <textarea name="recept" form="edit" cols="50" rows="5" placeholder="Recept" oninput=\'this.style.height = "";this.style.height = this.scrollHeight + "px"\' style="resize:none"></textarea><br>
+            Javno? <input type="checkbox" name="public" value="yes"/><br>
             <input type="submit" value="Posodobi recept"/>
             <input type="hidden" name="idrecepta" value="'.$id.'"/>
-            </form>';
+        </form></div>';
         }
         else {
             print '<h2 align="center">Ni recepta.</h2>';
         }
     ?>
+    
 </body>
 </html>
 
@@ -113,17 +113,14 @@ $id_exists = false;
     if($_SERVER['REQUEST_METHOD']== "POST"){
         $mojsql = mysqli_connect("localhost", "user", "user", "webdata") or die(mysqli_error($mojsql));
         $test = mysqli_select_db($mojsql, "webdata") or die("Cannot connect to databese..");
-        $details = $_POST['details'];
-        $public = "no";
+        $details = $_POST['sestavine'];
+        $recept= $_POST['recept'];
+        $public = $_POST['public'];
         $id = $_POST['idrecepta'];
         $date = strftime("%F %X");
 
-        foreach($_POST['public'] as $list){
-            if($list != null){
-                $public = "yes";
-            }
-        }
-        $query=mysqli_query($mojsql, "UPDATE list SET details= '$details', public='$public', urejeno='$date' WHERE id='$id'");
+        $query=mysqli_query($mojsql, "UPDATE recepti SET recept='$recept',sestavine= '$details', public='$public', urejeno='$date' WHERE id_recepta='$id'");
+
         header("location:home.php");
     }
 ?>
